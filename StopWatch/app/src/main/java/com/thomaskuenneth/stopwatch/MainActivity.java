@@ -24,9 +24,8 @@ public class MainActivity extends Activity {
     private TextView time;
     private Button startStop;
     private Button reset;
-
-    private boolean isRunning;
     private long started;
+    private boolean isRunning;
     private long diff;
 
     @Override
@@ -38,7 +37,7 @@ public class MainActivity extends Activity {
         startStop.setOnClickListener(v -> {
             isRunning = !isRunning;
             if (isRunning) {
-                run();
+                scheduleAtFixedRate();
             } else {
                 timerTask.cancel();
             }
@@ -74,7 +73,7 @@ public class MainActivity extends Activity {
         timer = new Timer();
         updateUI();
         if (isRunning) {
-            run();
+            scheduleAtFixedRate();
         }
     }
 
@@ -90,11 +89,7 @@ public class MainActivity extends Activity {
     }
 
     private void updateUI() {
-        if (isRunning) {
-            startStop.setText(R.string.stop);
-        } else {
-            startStop.setText(R.string.start);
-        }
+        startStop.setText(isRunning ? R.string.stop : R.string.start);
         reset.setEnabled(!isRunning);
     }
 
@@ -107,7 +102,7 @@ public class MainActivity extends Activity {
         time.setText(F.format(new Date(diff)));
     }
 
-    private void run() {
+    private void scheduleAtFixedRate() {
         started = System.currentTimeMillis() - diff;
         timerTask = new TimerTask() {
             @Override
@@ -116,6 +111,6 @@ public class MainActivity extends Activity {
                 setTime();
             }
         };
-        timer.scheduleAtFixedRate(timerTask, 200, 200);
+        timer.scheduleAtFixedRate(timerTask, 0, 200);
     }
 }
