@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends Activity {
+public class StopwatchActivity extends Activity {
 
     private static final DateFormat F = new SimpleDateFormat("HH:mm:ss:SSS",
             Locale.US);
