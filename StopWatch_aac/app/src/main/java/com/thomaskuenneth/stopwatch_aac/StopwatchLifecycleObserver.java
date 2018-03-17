@@ -24,7 +24,7 @@ public class StopwatchLifecycleObserver implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void startTimer() {
         timer = new Timer();
-        boolean running = model.isRunning();
+        boolean running = StopwatchViewModel.getBoolean(model.getIsRunning().getValue());
         if (running) {
             scheduleAtFixedRate();
         }
@@ -40,12 +40,14 @@ public class StopwatchLifecycleObserver implements LifecycleObserver {
     }
 
     void scheduleAtFixedRate() {
-        model.started.setValue(System.currentTimeMillis() - model.getDiff());
+        model.getStarted().setValue(System.currentTimeMillis()
+                - StopwatchViewModel.getLong(model.getDiff().getValue()));
         timerTask = new TimerTask() {
             @Override
             public void run() {
                 handler.post(()
-                        -> model.diff.setValue(System.currentTimeMillis() - model.getStarted()));
+                        -> model.getDiff().setValue(System.currentTimeMillis()
+                        - StopwatchViewModel.getLong(model.getStarted().getValue())));
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0, 200);

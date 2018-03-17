@@ -28,24 +28,24 @@ public class Stopwatch_aacActivity extends AppCompatActivity {
         Button reset = findViewById(R.id.reset);
         model = ViewModelProviders.of(this).get(StopwatchViewModel.class);
         StopwatchLifecycleObserver observer = new StopwatchLifecycleObserver(model, new Handler());
-        model.isRunning.observe(this, isRunning -> {
-            final boolean running = model.isRunning();
+        model.getIsRunning().observe(this, isRunning -> {
+            final boolean running = StopwatchViewModel.getBoolean(isRunning);
             startStop.setText(running ? R.string.stop : R.string.start);
             reset.setEnabled(!running);
         });
-        model.diff.observe(this, diff
-                -> time.setText(F.format(new Date(model.getDiff()))));
+        model.getDiff().observe(this, diff
+                -> time.setText(F.format(new Date(StopwatchViewModel.getLong(diff)))));
         startStop.setOnClickListener(v ->
         {
-            boolean running = !model.isRunning();
-            model.isRunning.setValue(running);
+            boolean running = !StopwatchViewModel.getBoolean(model.getIsRunning().getValue());
+            model.getIsRunning().setValue(running);
             if (running) {
                 observer.scheduleAtFixedRate();
             } else {
                 observer.stop();
             }
         });
-        reset.setOnClickListener(v -> model.diff.setValue(0L));
+        reset.setOnClickListener(v -> model.getDiff().setValue(0L));
         getLifecycle().addObserver(observer);
     }
 }
