@@ -15,14 +15,15 @@ import java.util.TimeZone;
 
 public class Stopwatch_aacActivity extends AppCompatActivity {
 
-    private static final DateFormat F = new SimpleDateFormat("HH:mm:ss:SSS",
-            Locale.US);
-
-    static {
-        F.setTimeZone(TimeZone.getTimeZone(("UTC")));
-    }
+    private final DateFormat F;
 
     private StopwatchViewModel model;
+
+    public Stopwatch_aacActivity() {
+        F = new SimpleDateFormat("HH:mm:ss:SSS",
+                Locale.US);
+        F.setTimeZone(TimeZone.getTimeZone(("UTC")));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
