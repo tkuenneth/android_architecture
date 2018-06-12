@@ -8,7 +8,7 @@ using Android.Support.V7.App;
 
 namespace Stopwatch_AAC
 {
-    [Activity(Label = "Stopwatch", Exported = true, MainLauncher = true)]
+    [Activity(Label = "Stopwatch", Exported = true, MainLauncher = false)]
     public class MainActivity : AppCompatActivity
     {
         readonly DateFormat F;
@@ -57,22 +57,7 @@ namespace Stopwatch_AAC
                 }
             };
             reset.Click += (object sender, EventArgs e) => { model.Diff = 0; };
-
             Lifecycle.AddObserver(observer);
-
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-
-        }
-
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-
         }
     }
 }
