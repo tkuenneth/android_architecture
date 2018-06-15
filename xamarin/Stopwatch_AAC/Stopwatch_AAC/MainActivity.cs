@@ -5,10 +5,11 @@ using Java.Util;
 using Android.Arch.Lifecycle;
 using System;
 using Android.Support.V7.App;
+using Android.Widget;
 
 namespace Stopwatch_AAC
 {
-    [Activity(Label = "Stopwatch", Exported = true, MainLauncher = false)]
+    [Activity(Label = "Stopwatch", Exported = true, MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
         readonly DateFormat F;
@@ -29,20 +30,25 @@ namespace Stopwatch_AAC
             base.OnCreate(savedInstanceState);
 
             SetContentView(Resource.Layout.Main);
-            var time = FindViewById(Resource.Id.time);
-            var startStop = FindViewById(Resource.Id.start_stop);
-            var reset = FindViewById(Resource.Id.reset);
+            var time = FindViewById<TextView>(Resource.Id.time);
+            var startStop = FindViewById<Button>(Resource.Id.start_stop);
+            var reset = FindViewById<TextView>(Resource.Id.reset);
 
             StopwatchLifecycleObserver observer = new StopwatchLifecycleObserver(model, new Handler());
 
-            // LiefeData
-            //model.getIsRunning().observe(this, isRunning -> {
-            //    final boolean running = StopwatchViewModel.getBoolean(isRunning);
-            //    startStop.setText(running ? R.string.stop : R.string.start);
-            //    reset.setEnabled(!running);
-            //});
-            //model.getDiff().observe(this, diff
-            //-> time.setText(F.format(new Date(StopwatchViewModel.getLong(diff)))));
+            model.PropertyChanged += (sender, e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case "Running":
+                        startStop.Text = GetString(model.Running ? Resource.String.stop : Resource.String.start);
+                        reset.Enabled = !model.Running;
+                        break;
+                    case "Diff":
+                        time.Text = F.Format(new Date(model.Diff));
+                        break;
+                }
+            };
 
             startStop.Click += (object sender, EventArgs e) =>
             {

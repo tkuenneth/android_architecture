@@ -95,8 +95,8 @@
     <Compile Include="StopwatchViewModel.cs" />
     <Compile Include="StopwatchLifecycleObserver.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="Minimal.cs" />
-    <Compile Include="MyApp.cs" />
+    <Compile Include="StopwatchApp.cs" />
+    <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

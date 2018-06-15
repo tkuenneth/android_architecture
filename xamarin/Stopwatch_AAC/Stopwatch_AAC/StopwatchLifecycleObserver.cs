@@ -1,26 +1,41 @@
 ﻿using Android.Arch.Lifecycle;
 using Android.OS;
+using Android.Util;
+using Java.Interop;
 using Java.Lang;
 using Java.Util;
 
 namespace Stopwatch_AAC
 {
-    public class StopwatchLifecycleObserver : Java.Lang.Object, ILifecycleObserver
+    public class StopwatchLifecycleObserver : Object, ILifecycleObserver
     {
+        const string TAG = "StopwatchLifecycleObserver";
+
         readonly StopwatchViewModel model;
         readonly Handler handler;
 
         Timer timer;
         TimerTask timerTask;
 
-        public StopwatchLifecycleObserver(StopwatchViewModel model, Handler handler)
+        public StopwatchLifecycleObserver(StopwatchViewModel model,
+                                          Handler handler)
         {
             this.model = model;
             this.handler = handler;
         }
 
+        [Lifecycle.Event.OnAny]
+        [Export]
+        public void Hello(ILifecycleOwner owner,
+                          Lifecycle.Event evt)
+        {
+            Log.Debug(TAG, owner.ToString());
+            Log.Debug(TAG, evt.ToString());
+        }
+
         [Lifecycle.Event.OnResume]
-        public void StartTimer(ILifecycleOwner owner, Lifecycle.Event evt)
+        [Export]
+        public void StartTimer()
         {
             timer = new Timer();
             if (model.Running)
@@ -30,6 +45,7 @@ namespace Stopwatch_AAC
         }
 
         [Lifecycle.Event.OnPause]
+        [Export]
         public void StopTimer()
         {
             timer.Cancel();

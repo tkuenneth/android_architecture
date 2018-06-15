@@ -7,11 +7,11 @@ using Java.Interop;
 namespace Stopwatch_AAC
 {
     [Application]
-    public class MyApp : Application, ILifecycleObserver
+    public class StopwatchApp : Application, ILifecycleObserver
     {
         const string TAG = "MyApp";
 
-        public MyApp(IntPtr handle, Android.Runtime.JniHandleOwnership ownerShip) : base(handle, ownerShip)
+        public StopwatchApp(IntPtr handle, Android.Runtime.JniHandleOwnership ownerShip) : base(handle, ownerShip)
         {
         }
 
@@ -25,14 +25,14 @@ namespace Stopwatch_AAC
         [Export]
         public void Stopped()
         {
-            Log.Debug(TAG, "App entered background state.");
+            Log.Debug(TAG, "App received OnStop");
         }
 
         [Lifecycle.Event.OnStart]
         [Export]
         public void Started()
         {
-            Log.Debug(TAG, "App entered foreground state.");
+            Log.Debug(TAG, "App received OnStart");
         }
     }
 }
