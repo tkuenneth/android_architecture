@@ -5,33 +5,13 @@ import android.arch.lifecycle.ViewModel;
 
 class StopwatchViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> isRunning = new MutableLiveData<>();
-    private final MutableLiveData<Long> diff = new MutableLiveData<>();
-    private final MutableLiveData<Long> started = new MutableLiveData<>();
+    public final MutableLiveData<Boolean> running = new MutableLiveData<>();
+    public final MutableLiveData<Long> diff = new MutableLiveData<>();
+    public final MutableLiveData<Long> started = new MutableLiveData<>();
 
-    MutableLiveData<Boolean> getIsRunning() {
-        return isRunning;
-    }
-
-    MutableLiveData<Long> getDiff() {
-        return diff;
-    }
-
-    MutableLiveData<Long> getStarted() {
-        return started;
-    }
-
-    static boolean getBoolean(Boolean data) {
-        if (data != null) {
-            return data;
-        }
-        return false;
-    }
-
-    static long getLong(Long data) {
-        if (data != null) {
-            return data;
-        }
-        return 0L;
+    public StopwatchViewModel() {
+        running.setValue(false);
+        diff.setValue(0L);
+        started.setValue(0L);
     }
 }
