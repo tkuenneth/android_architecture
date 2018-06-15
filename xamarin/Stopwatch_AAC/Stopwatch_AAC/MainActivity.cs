@@ -12,8 +12,12 @@ namespace Stopwatch_AAC
     [Activity(Label = "Stopwatch", Exported = true, MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+        static readonly StopwatchViewModel model = new StopwatchViewModel();
+
         readonly DateFormat F;
-        readonly StopwatchViewModel model;
+
+        TextView time;
+        Button startStop, reset;
 
         public MainActivity()
         {
@@ -22,34 +26,28 @@ namespace Stopwatch_AAC
             {
                 TimeZone = Java.Util.TimeZone.GetTimeZone(("UTC"))
             };
-            model = new StopwatchViewModel();
         }
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
             SetContentView(Resource.Layout.Main);
-            var time = FindViewById<TextView>(Resource.Id.time);
-            var startStop = FindViewById<Button>(Resource.Id.start_stop);
-            var reset = FindViewById<TextView>(Resource.Id.reset);
-
+            time = FindViewById<TextView>(Resource.Id.time);
+            startStop = FindViewById<Button>(Resource.Id.start_stop);
+            reset = FindViewById<Button>(Resource.Id.reset);
             StopwatchLifecycleObserver observer = new StopwatchLifecycleObserver(model, new Handler());
-
             model.PropertyChanged += (sender, e) =>
             {
                 switch (e.PropertyName)
                 {
                     case "Running":
-                        startStop.Text = GetString(model.Running ? Resource.String.stop : Resource.String.start);
-                        reset.Enabled = !model.Running;
+                        UpdateButtons();
                         break;
                     case "Diff":
-                        time.Text = F.Format(new Date(model.Diff));
+                        UpdateTime();
                         break;
                 }
             };
-
             startStop.Click += (object sender, EventArgs e) =>
             {
                 model.Running = !model.Running;
@@ -64,6 +62,19 @@ namespace Stopwatch_AAC
             };
             reset.Click += (object sender, EventArgs e) => { model.Diff = 0; };
             Lifecycle.AddObserver(observer);
+            UpdateButtons();
+            UpdateTime();
+        }
+
+        void UpdateButtons()
+        {
+            startStop.Text = GetString(model.Running ? Resource.String.stop : Resource.String.start);
+            reset.Enabled = !model.Running;
+        }
+
+        void UpdateTime()
+        {
+            time.Text = F.Format(new Date(model.Diff));
         }
     }
 }
