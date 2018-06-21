@@ -9,16 +9,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class StopwatchActivity extends Activity {
 
-    private static final DateFormat F = new SimpleDateFormat("HH:mm:ss:SSS",
-            Locale.US);
     private static final String KEY_DIFF = "diff";
     private static final String KEY_RUNNING = "running";
 
+    private final DateFormat format;
     private Timer timer;
     private TimerTask timerTask;
     private TextView time;
@@ -27,6 +27,12 @@ public class StopwatchActivity extends Activity {
     private long started;
     private boolean isRunning;
     private long diff;
+
+    public StopwatchActivity() {
+        format = new SimpleDateFormat("HH:mm:ss:SSS",
+                Locale.US);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +105,7 @@ public class StopwatchActivity extends Activity {
     }
 
     private void setTime() {
-        time.setText(F.format(new Date(diff)));
+        time.setText(format.format(new Date(diff)));
     }
 
     private void scheduleAtFixedRate() {
