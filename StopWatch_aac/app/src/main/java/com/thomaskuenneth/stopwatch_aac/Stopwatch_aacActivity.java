@@ -2,7 +2,6 @@ package com.thomaskuenneth.stopwatch_aac;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,7 +32,7 @@ public class Stopwatch_aacActivity extends AppCompatActivity {
         Button startStop = findViewById(R.id.start_stop);
         Button reset = findViewById(R.id.reset);
         model = ViewModelProviders.of(this).get(StopwatchViewModel.class);
-        StopwatchLifecycleObserver observer = new StopwatchLifecycleObserver(model, new Handler());
+        StopwatchLifecycleObserver observer = new StopwatchLifecycleObserver(model);
         model.running.observe(this, running -> {
             if (running != null) {
                 startStop.setText(running ? R.string.stop : R.string.start);

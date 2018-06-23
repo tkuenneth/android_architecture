@@ -3,7 +3,6 @@ package com.thomaskuenneth.stopwatch_aac;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.os.Handler;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,14 +10,12 @@ import java.util.TimerTask;
 public class StopwatchLifecycleObserver implements LifecycleObserver {
 
     private final StopwatchViewModel model;
-    private final Handler handler;
 
     private Timer timer;
     private TimerTask timerTask;
 
-    StopwatchLifecycleObserver(StopwatchViewModel model, Handler handler) {
+    StopwatchLifecycleObserver(StopwatchViewModel model) {
         this.model = model;
-        this.handler = handler;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -49,8 +46,9 @@ public class StopwatchLifecycleObserver implements LifecycleObserver {
             public void run() {
                 Long started = model.started.getValue();
                 if (started != null) {
-                    handler.post(()
-                            -> model.diff.setValue(System.currentTimeMillis() - started));
+                    model.diff.postValue(System.currentTimeMillis() - started);
+//                    handler.post(()
+//                            -> model.diff.setValue(System.currentTimeMillis() - started));
                 }
             }
         };
