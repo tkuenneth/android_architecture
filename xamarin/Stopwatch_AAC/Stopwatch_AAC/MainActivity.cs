@@ -6,6 +6,7 @@ using Android.Arch.Lifecycle;
 using System;
 using Android.Support.V7.App;
 using Android.Widget;
+using System.ComponentModel;
 
 namespace Stopwatch_AAC
 {
@@ -18,6 +19,10 @@ namespace Stopwatch_AAC
 
         TextView time;
         Button startStop, reset;
+
+        PropertyChangedEventHandler handlerModelChanged;
+        EventHandler startStopClicked;
+        EventHandler resetClicked;
 
         public MainActivity()
         {
@@ -36,7 +41,8 @@ namespace Stopwatch_AAC
             startStop = FindViewById<Button>(Resource.Id.start_stop);
             reset = FindViewById<Button>(Resource.Id.reset);
             StopwatchLifecycleObserver observer = new StopwatchLifecycleObserver(model, new Handler());
-            model.PropertyChanged += (sender, e) =>
+
+            handlerModelChanged = (sender, e) =>
             {
                 switch (e.PropertyName)
                 {
@@ -48,7 +54,9 @@ namespace Stopwatch_AAC
                         break;
                 }
             };
-            startStop.Click += (object sender, EventArgs e) =>
+            model.PropertyChanged += handlerModelChanged;
+
+            startStopClicked = (object sender, EventArgs e) =>
             {
                 model.Running = !model.Running;
                 if (model.Running)
@@ -60,10 +68,22 @@ namespace Stopwatch_AAC
                     observer.Stop();
                 }
             };
-            reset.Click += (object sender, EventArgs e) => { model.Diff = 0; };
+            startStop.Click += startStopClicked;
+
+            resetClicked = (object sender, EventArgs e) => { model.Diff = 0; };
+            reset.Click += resetClicked;
+
             Lifecycle.AddObserver(observer);
             UpdateButtons();
             UpdateTime();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            model.PropertyChanged -= handlerModelChanged;
+            startStop.Click -= startStopClicked;
+            reset.Click -= resetClicked;
         }
 
         void UpdateButtons()
