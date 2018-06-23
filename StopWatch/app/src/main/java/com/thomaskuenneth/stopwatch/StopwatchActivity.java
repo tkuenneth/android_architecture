@@ -114,7 +114,7 @@ public class StopwatchActivity extends Activity {
             @Override
             public void run() {
                 diff = System.currentTimeMillis() - started;
-                setTime();
+                runOnUiThread(() -> setTime());
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0, 200);
