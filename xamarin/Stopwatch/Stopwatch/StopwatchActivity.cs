@@ -3,15 +3,14 @@ using Android.OS;
 using Java.Text;
 using Java.Util;
 using System;
-using Android.Support.V7.App;
 using Android.Widget;
 using Java.Lang;
 using Android.Views;
 
 namespace Stopwatch
 {
-    [Activity(Label = "Stopwatch", Exported = true, MainLauncher = true)]
-    public class StopwatchActivity : AppCompatActivity
+    [Activity(Label = "@string/app_name", Exported = true, MainLauncher = true)]
+    public class StopwatchActivity : Activity
     {
         const string KEY_DIFF = "diff";
         const string KEY_RUNNING = "running";
